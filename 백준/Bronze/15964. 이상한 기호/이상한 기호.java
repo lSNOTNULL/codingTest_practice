@@ -8,7 +8,7 @@ public class Main {
             StringTokenizer st = new StringTokenizer(br.readLine());
             int A = Integer.parseInt(st.nextToken());
             int B = Integer.parseInt(st.nextToken());
-            int answer = (A+B)*(A-B);
+            long answer = (long) (A+B)*(A-B);
             
             bw.write(String.valueOf(answer));
             bw.flush();
