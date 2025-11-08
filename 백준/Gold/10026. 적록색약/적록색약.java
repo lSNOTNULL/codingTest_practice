@@ -17,46 +17,44 @@ public class Main {
                     color[i][j] = c;
                 }
             }
-            int answer = BFS(color);
-            int answer_gr = BFS_GR(color);
+            int answer = countColor(color);
+            int answer_gr = COMBINE_GR(color);
             bw.write(String.valueOf(answer + " " + answer_gr));
             bw.flush();
         }
     }
-    public static int BFS(char[][] color) {
-        Queue<int[]> queue = new LinkedList<>();
+    public static int countColor(char[][] color) {
         boolean[][] visited = new boolean[N][N];
         int cnt = 0;
         
         for(int i=0; i<N; i++) {
             for(int j=0; j<N; j++) {
                 if(!visited[i][j]) {
-                    queue.offer(new int[]{i,j});
-                    visited[i][j] = true;
                     cnt++;
-                    
-                    while(!queue.isEmpty()) {
-                        int[] curr = queue.poll();
-                        int curr_x = curr[0];
-                        int curr_y = curr[1];
-                        
-                        for(int m=0; m<4; m++) {
-                            int nx = curr_x + dx[m];
-                            int ny = curr_y + dy[m];
-                            
-                            if(nx < 0 || nx >=N || ny < 0 || ny >= N) continue;
-                            if(!visited[nx][ny] && color[nx][ny] == color[curr_x][curr_y]) {
-                                queue.offer(new int[]{nx,ny});
-                                visited[nx][ny] = true;
-                            }
-                        }
-                    }
+                    DFS(i,j,visited,color);
                 }
             }
         }
         return cnt;
     }
-    public static int BFS_GR(char[][] color) {
+    
+    public static void DFS(int i, int j, boolean[][] visited, char[][] color) {
+        visited[i][j] = true;
+        
+        for(int m=0; m<4; m++) {
+            int nx = i + dx[m];
+            int ny = j + dy[m];
+            
+            if(nx < 0 || nx >= N || ny < 0 || ny >= N) continue;
+            if(!visited[nx][ny] && color[nx][ny] == color[i][j]) {
+                DFS(nx,ny, visited, color);
+            }
+        }
+    }
+    
+    
+    
+    public static int COMBINE_GR(char[][] color) {
         char[][] colorGR = new char[N][N];
         
         for(int i=0; i<N; i++) {
@@ -68,6 +66,6 @@ public class Main {
                 }
             }
         }
-        return BFS(colorGR);
+        return countColor(colorGR);
     }
 }
